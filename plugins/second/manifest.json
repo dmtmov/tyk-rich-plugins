@@ -1,0 +1,23 @@
+{
+    "file_list": [
+        "middleware.py"
+    ],
+    "custom_middleware": {
+        "pre": [],
+        "post": [
+        ],
+        "response": [
+        ],
+        "auth_check": {
+            "name": "AuthCheck"
+        },
+        "driver": "python",
+        "id_extractor": {
+            "extract_from": "header",
+            "extract_with": "value",
+            "extractor_config": {
+                "header_name": "Authorization"
+            }
+        }
+    }
+}

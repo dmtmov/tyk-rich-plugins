@@ -1,0 +1,20 @@
+name: Publish PR middleware with commit hash
+
+on:
+  push:
+    paths:
+      - 'plugins/*'
+
+jobs:
+  push:
+    runs-on: ubuntu-latests
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Build deployable zip file using docker
+        run: |
+          version=$(git log -1 --format="%h")
+          echo version=$version
+
