@@ -15,7 +15,7 @@ jobs:
 
       - name: File tree
         run: |
-          apt install -y tree
+          sudo apt install -y tree
           tree .
 
       - name: Build deployable zip file using docker
