@@ -7,11 +7,14 @@ on:
 
 jobs:
   push:
-    runs-on: ubuntu-latests
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
+        run: |
+          apt install -y tree
+          tree .
 
       - name: Build deployable zip file using docker
         run: |
