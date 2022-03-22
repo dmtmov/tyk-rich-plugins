@@ -3,7 +3,7 @@ name: Publish PR middleware with commit hash
 on:
   push:
     paths:
-      - 'plugins/*'
+      - 'plugins/**'
 
 jobs:
   push:
