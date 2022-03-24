@@ -21,11 +21,11 @@ jobs:
           sudo apt install -y tree
           tree .
 
-      - name: Build deployable zip file using docker
+      - name: Specify plugin to compress
         run: |
-          plugins=()
           for file in ${{ steps.files.outputs.all }}; do
-            plugins+=($(echo "$file" | cut -d \/ -f 2));
+            if [[ "$file" == *"plugins/"* ]]; then
+              echo "$file" | cut -d \/ -f 2;
+            fi;
           done
-          echo $plugins;
 
