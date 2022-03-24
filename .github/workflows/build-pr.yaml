@@ -22,10 +22,12 @@ jobs:
         run: |
           sudo apt install -y tree
           tree .
-          echo '${{ steps.files.outputs.all }}'
 
       - name: Build deployable zip file using docker
         run: |
           version=$(git log -1 --format="%h")
           echo version=$version
+        for file in ${{ steps.files.outputs.all }}:
+          ls -l "$file";
+        done
 
