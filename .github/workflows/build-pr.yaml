@@ -27,7 +27,7 @@ jobs:
         run: |
           version=$(git log -1 --format="%h")
           echo version=$version
-          for file in ${{ steps.files.outputs.all }}:
+          for file in ${{ steps.files.outputs.all }}; do
             ls -l "$file";
           done
 
