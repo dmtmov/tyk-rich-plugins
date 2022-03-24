@@ -14,9 +14,9 @@ jobs:
         uses: actions/checkout@v2
 
       - id: files
-        uses: lots0logs/gh-action-get-changed-files@2.1.4
+        uses: jitterbit/get-changed-files@v1 
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          format: ''
 
       - name: File tree
         run: |
@@ -25,9 +25,9 @@ jobs:
 
       - name: Build deployable zip file using docker
         run: |
-          version=$(git log -1 --format="%h")
-          echo version=$version
+          plugins=()
           for file in ${{ steps.files.outputs.all }}; do
-            ls -l "$file";
-          done
+            plugins+=($(echo "$file" | cut -d \/ -f 2));
+          done;
+          echo $plugins;
 
