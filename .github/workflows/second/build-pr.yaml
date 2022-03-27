@@ -1,0 +1,30 @@
+name: Build PR of second plugin
+
+on:
+  push:
+    paths:
+      - 'plugins/second/**'
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - id: files
+        uses: jitterbit/get-changed-files@v1
+
+      - name: File tree
+        run: |
+          sudo apt install -y tree
+          tree .
+
+      - name: Specify plugin to compress
+        run: |
+          for file in ${{ steps.files.outputs.added_modified }}; do
+            if [[ "$file" == *"plugins/"* ]]; then
+              echo "$file" | cut -d \/ -f 2;
+            fi;
+          done

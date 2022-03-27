@@ -1,9 +1,9 @@
-name: Publish PR middleware with commit hash
+name: Build PR of first plugin
 
 on:
   push:
     paths:
-      - 'plugins/**'
+      - 'plugins/first/**'
 
 jobs:
   push:
@@ -23,9 +23,8 @@ jobs:
 
       - name: Specify plugin to compress
         run: |
-          for file in ${{ steps.files.outputs.all }}; do
+          for file in ${{ steps.files.outputs.added_modified }}; do
             if [[ "$file" == *"plugins/"* ]]; then
               echo "$file" | cut -d \/ -f 2;
             fi;
           done
-
