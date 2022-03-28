@@ -26,9 +26,8 @@ jobs:
 
       - name: Check added/modified bundle files
         run: |
-          filesList=${{steps.files.outputs.added_modified}}
-          echo "Files: $filesList"
-          if [[ "$filesList" == *"${{matrix.plugin}}"* ]]; then
+          echo -e "Files: ${{steps.files.outputs.added_modified}}\n"
+          if grep -q "${{matrix.plugin}}" <<< "${{steps.files.outputs.added_modified}}"; then
             echo "Continue processing plugin..."
             exit 0
           else
