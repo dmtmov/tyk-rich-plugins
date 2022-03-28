@@ -5,7 +5,7 @@ from gateway import TykGateway as tyk
 @Hook
 def PreHook(request, session, spec):
     tyk.log("PreHook is called", "info")
-    request.add_header("Foo", "Bar")
+    request.add_header("Foo", "Barrr")
     return request, session
 
 
