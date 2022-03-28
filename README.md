@@ -1,3 +1,3 @@
 # tyk-plugin-system
 
-#include "plugins/README.md"
+[Contribute](plugins/README.md)
