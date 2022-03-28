@@ -30,7 +30,6 @@ jobs:
           if [[ "${{steps.files.outputs.added_modified}}" == *"${{matrix.plugin}}"* ]]; then
             echo "Continue processing '${{matrix.plugin}}' plugin..."
             exit 0;
-          else
           echo "No patch files detected for the '${{matrix.plugin}}' plugin"
           echo "Cancel the workflow!"
           exit 1;
