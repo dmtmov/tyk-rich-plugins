@@ -1,0 +1,65 @@
+name: Build PR of first plugin
+
+on:
+  push:
+    paths:
+      - 'plugins/**'
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        plugin: [first, second]
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Get patch files
+        id: files
+        uses: jitterbit/get-changed-files@v1
+
+      - name: Use matrix
+        run: |
+          echo ${{ matrix.plugin }}
+          echo ${{ steps.files.outputs.added_modified }}
+
+          if [[ "${{ steps.files.outputs.added_modified }}" == *"${{ matrix.plugin }}"* ]]; then
+            echo "plugin \`${{ matrix.plugin }}\` files appear in commit"
+          fi
+
+
+#       - name: Specify plugin to compress
+#         id: plugins-names
+#         with:
+#           result-encoding: string
+#         run: |
+#           for file in ${{ steps.files.outputs.added_modified }}; do
+#             if [[ "$file" == *"plugins/"* ]]; then
+#               echo "$file" | cut -d \/ -f 2;
+#             fi;
+#           done
+
+#       - name: Check if multiple plugins
+#         if: {{ steps.plugins-names.output. }}
+
+#       - name: Create & upload the bundle
+#         run: |
+#           docker run --rm -v $(pwd):/plugin --entrypoint "/bin/sh" -w "/plugin" tykio/tyk-gateway:v4.0 -c "/opt/tyk-gateway/tyk bundle build -y"
+#           mv bundle.zip bundle-$version.zip
+#           curl -v --connect-timeout 2 --speed-time 10 --speed-limit 10000 -u github:${{ secrets.NEXUS_PASSWORD }} \
+#             --upload-file "$(pwd)/bundle-$version.zip" "https://nexus.services.bwell.zone/repository/tyk-middleware/"
+
+# GetUniquePluginNames () {
+# for file in $(echo "plugins/second/middleware.lua plugins/first/manifest.json plugins/first/middleware.py"); do
+#   if [[ "$file" == *"plugins/"* ]]; then
+#     echo $file | cut -d \/ -f 2
+#     # plugins+=" $(echo $file | cut -d \/ -f 2)"
+#   fi;
+# done | uniq
+# };
+
+# plugins=GetUniquePluginNames;
+# echo $plugins;
+
