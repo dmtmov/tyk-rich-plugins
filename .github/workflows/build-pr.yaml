@@ -36,8 +36,8 @@ jobs:
             exit 1;
           fi
 
-      - name: Comp  ress and upload bundle
-        if: github.steps.check-files.outputs.conclusion == 'success'
+      - name: Compress and upload bundle
+        if: github.steps.check-files.outputs.success == 'true'
         run: |
           version=$(git log -1 --format="%h")
           docker run --rm -v $(pwd)/plugins/${{matrix.plugin}}:/plugin \
