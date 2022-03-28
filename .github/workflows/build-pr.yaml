@@ -26,18 +26,18 @@ jobs:
       - name: Check added/modified bundle files
         id: check-files
         run: |
-          echo "Commit 'added_modified' files: ${{steps.files.outputs.added_modified}}"
+          echo "Files: ${{steps.files.outputs.added_modified}}"
           if [[ "${{steps.files.outputs.added_modified}}" == *"${{matrix.plugin}}"* ]]; then
-            echo "Continue processing '${{matrix.plugin}}' plugin..."
+            echo "Continue processing plugin..."
             exit 0;
           fi
-          echo "No patch files detected for the '${{matrix.plugin}}' plugin"
+          echo "No patch files detected for the plugin"
           echo "Cancel the workflow!"
           exit 1;
 
       - name: Compress and upload bundle
-        if: github.steps.check-files.outputs.conclusion == 'success'
-        # if: success()
+        # if: github.steps.check-files.outputs.conclusion == 'success'
+        if: success()
         run: |
           version=$(git log -1 --format="%h")
           docker run --rm -v $(pwd)/plugins/${{matrix.plugin}}:/plugin \
