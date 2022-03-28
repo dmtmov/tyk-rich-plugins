@@ -12,7 +12,7 @@ on:
         - second
         - response-hook
       version:
-        description: 'version like *.*.*'
+        description: 'version like 0.0.1'
         required: true
         type: string
 
