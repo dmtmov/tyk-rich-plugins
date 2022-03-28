@@ -27,7 +27,12 @@ jobs:
         run: echo "hello"; exit 0;
 
       - name: force fail step
-        run: echo "hello"; exit 1;
+        id: force-fail
+        run: |
+          echo "hello";
+          echo "::set-output name=cancel-step::true"
+          exit 1;
+        continue-on-error: true
 
       - name: based on prev decision step
         if: success()
@@ -38,10 +43,12 @@ jobs:
         run: echo "hello"; exit 0;
 
       - name: basic step
+        if: steps.force-fail.outputs.cancel-step == 'true'
         run: echo "hello world";
 
       - name: Check added/modified bundle files
         id: check-files
+
         run: |
           echo "Files: ${{steps.files.outputs.added_modified}}"
           if [[ "${{steps.files.outputs.added_modified}}" == *"${{matrix.plugin}}"* ]]; then
