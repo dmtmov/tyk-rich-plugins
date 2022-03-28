@@ -27,16 +27,15 @@ jobs:
         run: |
           echo "Commit 'added_modified' files: ${{steps.files.outputs.added_modified}}"
           if [[ "${{steps.files.outputs.added_modified}}" == *"${{matrix.plugin}}"* ]]; then
-            echo "Continue processing '${{matrix.plugin}}'..."
+            echo "Continue processing '${{matrix.plugin}}' plugin..."
             exit 0;
-          else
-            echo "No patch files detected for the '${{matrix.plugin}}' plugin"
-            echo "Cancel the workflow!"
-            exit 1;
           fi
+          echo "No patch files detected for the '${{matrix.plugin}}' plugin"
+          echo "Cancel the workflow!"
+          exit 1;
 
       - name: Compress and upload bundle
-        if: ${{ success() }}
+        if: success()
         run: |
           version=$(git log -1 --format="%h")
           docker run --rm -v $(pwd)/plugins/${{matrix.plugin}}:/plugin \
