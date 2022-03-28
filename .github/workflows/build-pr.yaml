@@ -23,8 +23,8 @@ jobs:
         id: files
         uses: jitterbit/get-changed-files@v1
 
-      - name: Check for cancelation
-        if: success()
+      - name: Check added/modified bundle files
+        id: check-files
         run: |
           echo "Commit 'added_modified' files: ${{steps.files.outputs.added_modified}}"
           if [[ "${{steps.files.outputs.added_modified}}" == *"${{matrix.plugin}}"* ]]; then
@@ -36,6 +36,8 @@ jobs:
           exit 1;
 
       - name: Compress and upload bundle
+        if: github.steps.check-files.outputs.conclusion == 'success'
+        # if: success()
         run: |
           version=$(git log -1 --format="%h")
           docker run --rm -v $(pwd)/plugins/${{matrix.plugin}}:/plugin \
