@@ -35,6 +35,7 @@ jobs:
           # exit 1;
 
           echo "good to go";
+          echo 1;
 
       - name: Compress and upload bundle
         if: success()
