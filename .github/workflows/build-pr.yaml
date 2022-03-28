@@ -1,6 +1,9 @@
 name: Build PR of first plugin
 
 on:
+  pull_request:
+    paths:
+      - 'plugins/**'
   push:
     paths:
       - 'plugins/**'
@@ -20,25 +23,34 @@ jobs:
         id: files
         uses: jitterbit/get-changed-files@v1
 
-      - name: Use matrix
+      - name: Check for cancelation
+        run: |
+          echo "Commit 'added_modified' files: ${{steps.files.outputs.added_modified}}"
+          if [[ "${{steps.files.outputs.added_modified}}" == *"${{matrix.plugin}}"* ]]; then
+            echo "Continue processing '${{matrix.plugin}}'..."
+            exit 0;
+          else
+            echo "No patch files detected for the '${{matrix.plugin}}' plugin"
+            echo "Cancel the workflow!"
+            exit 1;
+          fi
+
+      - name: Compress and upload bundle
+        if: ${{success()}}
         run: |
           version=$(git log -1 --format="%h")
-          echo ">>> version=$version"
-          echo ">>> ${{steps.files.outputs.added_modified}}"
+          docker run --rm -v $(pwd)/plugins/${{matrix.plugin}}:/plugin \
+            --entrypoint "/bin/sh" \
+            -w "/plugin" tykio/tyk-gateway:v4.0 \
+            -c "/opt/tyk-gateway/tyk bundle build -y"
 
-          if [[ "${{steps.files.outputs.added_modified}}" == *"${{matrix.plugin}}"* ]]; then
-            echo ">> ${{matrix.plugin}}"
+          mv plugins/${{matrix.plugin}}/bundle.zip ${{matrix.plugin}}-$version.zip
 
-            docker run --rm -v $(pwd)/plugins/${{matrix.plugin}}:/plugin \
-              --entrypoint "/bin/sh" \
-              -w "/plugin" tykio/tyk-gateway:v4.0 \
-              -c "/opt/tyk-gateway/tyk bundle build -y"
+          sudo apt install -y tree
+          tree .
 
-            mv plugins/${{matrix.plugin}}/bundle.zip ${{matrix.plugin}}-$version.zip
+          # push file to Nexus here <-
 
-            sudo apt install -y tree
-            tree .
-          fi
 
 
 #       - name: Specify plugin to compress
