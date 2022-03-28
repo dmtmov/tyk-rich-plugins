@@ -72,9 +72,7 @@ jobs:
 
           mv plugins/${{matrix.plugin}}/bundle.zip ${{matrix.plugin}}-$version.zip
 
-          sudo apt install -y tree
-          tree .
-
           # push file to Nexus here <-
 
-      - name: Last blank step
+      - name: Tree step
+        run: sudo apt install -y tree; tree .
