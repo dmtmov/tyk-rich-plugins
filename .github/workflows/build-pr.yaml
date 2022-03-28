@@ -23,6 +23,20 @@ jobs:
         id: files
         uses: jitterbit/get-changed-files@v1
 
+      - name: success step
+        run: echo "hello"; exit 0;
+
+      - name: based on prev decision step
+        if: success()
+        run: echo "seems all previous steps are succeeded"; exit 0;
+
+      - name: always run me
+        if: always()
+        run: echo "hello"; exit 0;
+
+      - name: basic step
+        run: echo "hello world";
+
       - name: Check added/modified bundle files
         id: check-files
         run: |
