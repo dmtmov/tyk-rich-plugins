@@ -32,7 +32,7 @@ jobs:
             -c "/opt/tyk-gateway/tyk bundle build -y"
 
           mv plugins/${{github.event.inputs.plugin-name}}/bundle.zip \
-            ${{matrix.plugin}}-${{github.event.inputs.version}}.zip
+            ${{github.event.inputs.plugin-name}}-${{github.event.inputs.version}}.zip
 
           sudo apt install -y tree
           tree .
