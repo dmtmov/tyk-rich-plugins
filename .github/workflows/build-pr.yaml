@@ -24,10 +24,10 @@ jobs:
         run: |
           version=$(git log -1 --format="%h")
           echo ">>> version=$version"
-          echo ">>> ${{ steps.files.outputs.added_modified }} \n"
+          echo ">>> ${{ steps.files.outputs.added_modified }}"
 
           if [[ "${{ steps.files.outputs.added_modified }}" == *"${{ matrix.plugin }}"* ]]; then
-            echo ">> ${{ matrix.plugin }} \n"
+            echo ">> ${{ matrix.plugin }}"
 
             docker run --rm -v $(pwd)/plugins/${{ matrix.plugin }}:/plugin \
               -w "/plugin" tykio/tyk-gateway:v4.0 \

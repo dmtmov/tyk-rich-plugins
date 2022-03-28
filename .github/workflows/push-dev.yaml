@@ -3,7 +3,7 @@ name: Push to Dev first plugin
 on:
   push:
     paths:
-      - 'plugins/first/**'
+      - 'plugins/tests/**'
 
 jobs:
   push:
