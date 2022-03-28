@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        plugin: [first, second]
+        plugin: [first, second, response-hook]
       fail-fast: false
 
     steps:
