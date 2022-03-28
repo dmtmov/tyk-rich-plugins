@@ -52,3 +52,5 @@ jobs:
           tree .
 
           # push file to Nexus here <-
+
+          echo -e "\nBundle name: ${{matrix.plugin}}-$version.zip\n"

@@ -1,9 +1,20 @@
-name: Push to Dev first plugin
+name: Push to Dev [manual]
 
 on:
-  push:
-    paths:
-      - 'plugins/tests/**'
+  workflow_dispatch:
+    inputs:
+      plugin-name:
+        description: 'Plugin name'
+        required: true
+        type: choice
+        options:
+        - first
+        - second
+        - response-hook 
+      version:
+        description: 'Version should be uniqie'
+        required: true
+        type: string
 
 jobs:
   push:
@@ -13,18 +24,17 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
-      - id: files
-        uses: jitterbit/get-changed-files@v1
-
-      - name: File tree
+      - name: Compress and upload bundle
         run: |
+          docker run --rm -v $(pwd)/plugins/${{github.event.inputs.plugin-name}}:/plugin \
+            --entrypoint "/bin/sh" \
+            -w "/plugin" tykio/tyk-gateway:v4.0 \
+            -c "/opt/tyk-gateway/tyk bundle build -y"
+
+          mv plugins/${{github.event.inputs.plugin-name}}/bundle.zip \
+            ${{matrix.plugin}}-${{github.event.inputs.version}}.zip
+
           sudo apt install -y tree
           tree .
 
-      - name: Specify plugin to compress
-        run: |
-          for file in ${{ steps.files.outputs.added_modified }}; do
-            if [[ "$file" == *"plugins/"* ]]; then
-              echo "$file" | cut -d \/ -f 2;
-            fi;
-          done
+          # push file to Nexus here <-
