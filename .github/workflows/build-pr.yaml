@@ -1,12 +1,12 @@
 name: Build PR of first plugin
 
 on:
-  # pull_request:
-  #   paths:
-  #     - 'plugins/**'
+  pull_request:
+    paths:
+      - 'plugins/**'
   push:
-    # paths:
-    #   - 'plugins/**'
+    paths:
+      - 'plugins/**'
 
 jobs:
   push:
@@ -24,21 +24,17 @@ jobs:
         uses: jitterbit/get-changed-files@v1
 
       - name: Check for cancelation
+        if: success()
         run: |
-          # echo "Commit 'added_modified' files: ${{steps.files.outputs.added_modified}}"
-          # if [[ "${{steps.files.outputs.added_modified}}" == *"${{matrix.plugin}}"* ]]; then
-          #   echo "Continue processing '${{matrix.plugin}}' plugin..."
-          #   exit 0;
-          # fi
-          # echo "No patch files detected for the '${{matrix.plugin}}' plugin"
-          # echo "Cancel the workflow!"
-          # exit 1;
-
-          echo "good to go";
-          echo 1;
+          echo "Commit 'added_modified' files: ${{steps.files.outputs.added_modified}}"
+          if [[ "${{steps.files.outputs.added_modified}}" == *"${{matrix.plugin}}"* ]]; then
+            echo "Continue processing '${{matrix.plugin}}' plugin..."
+          fi
+          echo "No patch files detected for the '${{matrix.plugin}}' plugin"
+          echo "Cancel the workflow!"
+          exit 1;
 
       - name: Compress and upload bundle
-        if: success()
         run: |
           version=$(git log -1 --format="%h")
           docker run --rm -v $(pwd)/plugins/${{matrix.plugin}}:/plugin \
