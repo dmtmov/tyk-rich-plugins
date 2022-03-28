@@ -48,9 +48,6 @@ jobs:
 
           mv plugins/${{matrix.plugin}}/bundle.zip ${{matrix.plugin}}-$version.zip
 
-          sudo apt install -y tree
-          tree .
-
           # push file to Nexus here <-
 
-          echo -e "\nBundle name: ${{matrix.plugin}}-$version.zip\n"
+          echo -e "\nBundle name: ${{matrix.plugin}}-$version.zip"

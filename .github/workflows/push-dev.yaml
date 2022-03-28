@@ -39,4 +39,4 @@ jobs:
 
           # push file to Nexus here <-
 
-          ls $newFileName
+          echo -e "\nBundle name: $newFileName"
