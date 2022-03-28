@@ -46,22 +46,23 @@ jobs:
         if: steps.force-fail.outputs.cancel-step == 'true'
         run: echo "hello world";
 
+
+
+
       - name: Check added/modified bundle files
         id: check-files
-
         run: |
           echo "Files: ${{steps.files.outputs.added_modified}}"
           if [[ "${{steps.files.outputs.added_modified}}" == *"${{matrix.plugin}}"* ]]; then
             echo "Continue processing plugin..."
-            exit 0;
+            echo "::set-output name=continue::further"
           else
             echo "No patch files detected for the plugin"
             echo "Cancel the workflow!"
-            exit 1;
           fi
 
       - name: Compress and upload bundle
-        if: github.steps.check-files.outputs.success == 'true'
+        if: github.steps.check-files.outputs.continue == 'further'
         run: |
           version=$(git log -1 --format="%h")
           docker run --rm -v $(pwd)/plugins/${{matrix.plugin}}:/plugin \
@@ -75,3 +76,5 @@ jobs:
           tree .
 
           # push file to Nexus here <-
+
+      - name: Last blank step
