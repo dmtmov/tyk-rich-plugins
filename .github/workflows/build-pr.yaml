@@ -24,48 +24,20 @@ jobs:
         id: files
         uses: jitterbit/get-changed-files@v1
 
-      - name: success step
-        run: echo "hello"; exit 0;
-
-      - name: force fail step
-        id: force-fail
-        run: |
-          echo "hello";
-          echo "::set-output name=cancel-step::true"
-          exit 1;
-        continue-on-error: true
-
-      - name: based on prev decision step
-        if: success()
-        run: echo "seems all previous steps are succeeded"; exit 0;
-
-      - name: always run me
-        if: always()
-        run: echo "hello"; exit 0;
-
-      - name: basic step
-        if: steps.force-fail.outputs.cancel-step == 'true'
-        run: echo "hello world";
-
-
-
-
       - name: Check added/modified bundle files
-        id: check-files
         run: |
-          echo "Files: ${{steps.files.outputs.added_modified}}"
-          if [[ "${{steps.files.outputs.added_modified}}" == *"${{matrix.plugin}}"* ]]; then
+          filesList=${{steps.files.outputs.added_modified}}
+          echo "Files: $filesList"
+          if [[ "$filesList" == *"${{matrix.plugin}}"* ]]; then
             echo "Continue processing plugin..."
-            # echo "::set-output name=continue::further"
-            exit 0;
+            exit 0
           else
             echo "No patch files detected for the plugin"
             echo "Cancel the workflow!"
-            exit 1;
+            exit 1
           fi
 
       - name: Compress and upload bundle
-        # if: github.steps.check-files.outputs.continue == 'further'
         if: success()
         run: |
           version=$(git log -1 --format="%h")
@@ -76,7 +48,7 @@ jobs:
 
           mv plugins/${{matrix.plugin}}/bundle.zip ${{matrix.plugin}}-$version.zip
 
-          # push file to Nexus here <-
+          sudo apt install -y tree
+          tree .
 
-      - name: Tree step
-        run: sudo apt install -y tree; tree .
+          # push file to Nexus here <-
