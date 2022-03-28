@@ -26,6 +26,9 @@ jobs:
       - name: success step
         run: echo "hello"; exit 0;
 
+      - name: force fail step
+        run: echo "hello"; exit 1;
+
       - name: based on prev decision step
         if: success()
         run: echo "seems all previous steps are succeeded"; exit 0;
