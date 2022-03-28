@@ -34,11 +34,10 @@ jobs:
               -w "/plugin" tykio/tyk-gateway:v4.0 \
               -c "/opt/tyk-gateway/tyk bundle build -y"
 
+            mv plugins/${{matrix.plugin}}/bundle.zip ${{matrix.plugin}}-$version.zip
+
             sudo apt install -y tree
             tree .
-
-            # mv bundle.zip ${{matrix.plugin}}-$version.zip
-            # ls -lah .
           fi
 
 
