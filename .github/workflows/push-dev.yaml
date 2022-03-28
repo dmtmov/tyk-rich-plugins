@@ -4,15 +4,15 @@ on:
   workflow_dispatch:
     inputs:
       plugin-name:
-        description: 'Plugin name'
+        description: 'plugin name'
         required: true
         type: choice
         options:
         - first
         - second
-        - response-hook 
+        - response-hook
       version:
-        description: 'Version should be uniqie'
+        description: 'version like *.*.*'
         required: true
         type: string
 
