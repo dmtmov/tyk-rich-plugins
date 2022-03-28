@@ -31,10 +31,12 @@ jobs:
             -w "/plugin" tykio/tyk-gateway:v4.0 \
             -c "/opt/tyk-gateway/tyk bundle build -y"
 
-          mv plugins/${{github.event.inputs.plugin-name}}/bundle.zip \
-            ${{github.event.inputs.plugin-name}}-${{github.event.inputs.version}}.zip
+          newFileName="${{github.event.inputs.plugin-name}}-${{github.event.inputs.version}}.zip"
+          mv plugins/${{github.event.inputs.plugin-name}}/bundle.zip $newFileName
 
           sudo apt install -y tree
           tree .
 
           # push file to Nexus here <-
+
+          ls $newFileName
