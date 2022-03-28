@@ -22,11 +22,20 @@ jobs:
 
       - name: Use matrix
         run: |
-          echo ${{ matrix.plugin }}
-          echo ${{ steps.files.outputs.added_modified }}
+          version=$(git log -1 --format="%h")
+          echo ">>> version=$version"
+          echo ">>> ${{ steps.files.outputs.added_modified }} \n"
 
           if [[ "${{ steps.files.outputs.added_modified }}" == *"${{ matrix.plugin }}"* ]]; then
-            echo "plugin \`${{ matrix.plugin }}\` files appear in commit"
+            echo ">> ${{ matrix.plugin }} \n"
+
+            docker run --rm -v $(pwd)/plugins/${{ matrix.plugin }}:/plugin \
+              -w "/plugin" tykio/tyk-gateway:v4.0 \
+              --entrypoint "/bin/sh" \
+              -c "/opt/tyk-gateway/tyk bundle build -y"
+            mv bundle.zip "${{ matrix.plugin }}-$version.zip
+
+            ls -lah .
           fi
 
 
